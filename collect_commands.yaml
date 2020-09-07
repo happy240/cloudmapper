@@ -5,18 +5,18 @@
   Request: get-caller-identity
 - Service: iam
   Request: get-account-authorization-details
-- Service: iam
-  # Generate the access reports for all roles, and collect them later
-  Request: generate-service-last-accessed-details
-  Parameters:
-    - Name: Arn
-      Value: iam-get-account-authorization-details.json|.RoleDetailList[]?|.Arn
-- Service: iam
-  # Generate the access reports for all roles, and collect them later
-  Request: generate-service-last-accessed-details
-  Parameters:
-    - Name: Arn
-      Value: iam-get-account-authorization-details.json|.UserDetailList[]?|.Arn
+# - Service: iam
+#   # Generate the access reports for all roles, and collect them later
+#   Request: generate-service-last-accessed-details
+#   Parameters:
+#     - Name: Arn
+#       Value: iam-get-account-authorization-details.json|.RoleDetailList[]?|.Arn
+# - Service: iam
+#   # Generate the access reports for all roles, and collect them later
+#   Request: generate-service-last-accessed-details
+#   Parameters:
+#     - Name: Arn
+#       Value: iam-get-account-authorization-details.json|.UserDetailList[]?|.Arn
 - Service: iam
   Request: get-role # Need to get IAM boundaries
   Parameters:
@@ -152,6 +152,11 @@
   Parameters:
   - Name: TargetGroupArn
     Value: elbv2-describe-target-groups/*|.TargetGroups[].TargetGroupArn
+- Service: elbv2
+  Request: describe-load-balancer-attributes
+  Parameters:
+  - Name: LoadBalancerArn
+    Value: elbv2-describe-load-balancers.json|.LoadBalancers[].LoadBalancerArn
 - Service: elbv2
   Request: describe-tags
   Parameters:
@@ -343,7 +348,12 @@
   Request: describe-tasks
   Custom_collection: True
 - Service: eks
+  Request: list-clusters
+- Service: eks
   Request: describe-cluster
+  Parameters:
+  - Name: name
+    Value: eks-list-clusters.json|.clusters[]
 - Service: logs
   Request: describe-destinations
 - Service: logs
@@ -356,21 +366,21 @@
   Request: get-load-balancers
 - Service: apigateway
   Request: get-rest-apis
-- Service: apigateway
-  Request: get-resources
-  Parameters:
-  - Name: restApiId
-    Value: apigateway-get-rest-apis.json|.items[]?|.id
-- Service: apigateway
-  Request: get-deployments
-  Parameters:
-  - Name: restApiId
-    Value: apigateway-get-rest-apis.json|.items[]?|.id
-- Service: apigateway
-  Request: get-stages
-  Parameters:
-  - Name: restApiId
-    Value: apigateway-get-rest-apis.json|.items[]?|.id
+# - Service: apigateway
+#   Request: get-resources
+#   Parameters:
+#   - Name: restApiId
+#     Value: apigateway-get-rest-apis.json|.items[]?|.id
+# - Service: apigateway
+#   Request: get-deployments
+#   Parameters:
+#   - Name: restApiId
+#     Value: apigateway-get-rest-apis.json|.items[]?|.id
+# - Service: apigateway
+#   Request: get-stages
+#   Parameters:
+#   - Name: restApiId
+#     Value: apigateway-get-rest-apis.json|.items[]?|.id
 - Service: guardduty
   Request: list-detectors
 - Service: guardduty
@@ -382,5 +392,17 @@
   Request: describe-organization
 - Service: organizations
   Request: list-accounts
-- Service: kafka
-  Request: list-clusters
+# - Service: kafka
+#   Request: list-clusters
+# - Service: secretsmanager
+#   Request: list-secrets
+# - Service: secretsmanager
+#   Request: get-resource-policy
+#   Parameters:
+#   - Name: SecretId
+#     Value: secretsmanager-list-secrets.json|.SecretList[]?|.Name
+- Service: route53
+  Request: list-hosted-zones-by-vpc
+  Custom_collection: True
+- Service: accessanalyzer
+  Request: list-analyzers
